@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nginxplus:
+    image: nginxplus:latest
+    ports:
+      - "8080:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    networks:
+      - corp_network
+  tkgi_local:
+      image: httpd:latest
+      ports:
+        - "8091:80"
+      command: sh -c "echo '<html><body><h1>Hello, World from TKGI!</h1></body></html>' > /usr/local/apache2/htdocs/index.html && httpd-foreground"
+      networks:
+      - corp_network
+  # ocp:
+  #     image: httpd:latest
+  #     ports:
+  #       - "8092:80"
+  #     command: sh -c "echo '<html><body><h1>Hello, World from OCP!</h1></body></html>' > /usr/local/apache2/htdocs/index.html && httpd-foreground"
+networks:
+  corp_network:
+    external: true

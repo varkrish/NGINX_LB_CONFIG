@@ -1,0 +1,22 @@
+version: '3'
+services:
+  nginxplus-ocp:
+    image: nginxplus:latest
+    ports:
+      - "8180:80"
+      - "8443:443"
+    volumes:
+      - ./ocp.nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    networks:
+      - corp_network
+  ocp:
+      image: httpd:latest
+      ports:
+        - "8092:80"
+      command: sh -c "echo '<html><body><h1>Hello, World from OCP!</h1></body></html>' > /usr/local/apache2/htdocs/index.html && httpd-foreground"
+      networks:
+        - corp_network
+networks:
+  corp_network:
+    external: true
